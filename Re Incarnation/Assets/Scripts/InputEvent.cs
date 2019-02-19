@@ -10,6 +10,7 @@ public class InputEvent : MonoBehaviour {
 	public void CheckInput () {
 		if(Input.GetButtonDown(input) == true){
 			uEvent.Invoke();
+			//print(input);
 		}
 	}
 }

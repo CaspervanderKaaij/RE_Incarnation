@@ -23,7 +23,7 @@ public class NormalWalking : BaseMove
 
     void Start()
     {
-        anim = GetComponentInChildren<Animator>();
+        anim = transform.root.GetComponentInChildren<Animator>();
     }
     void Update()
     {
@@ -42,6 +42,7 @@ public class NormalWalking : BaseMove
         currentAccDec = 0;
         moveV3 = Vector3.zero;
         currentAngleAcceleration = 0;
+        anim.SetInteger("NextMove", 0);
     }
 
     void SetRotation()
@@ -52,7 +53,7 @@ public class NormalWalking : BaseMove
             rotGoal = new Vector3(0, Mathf.Atan2(inputV2.y, inputV2.x) * Mathf.Rad2Deg, 0);
         }
 
-        transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.Euler(rotGoal), Time.deltaTime * rotSpeed);
+        transform.root.rotation = Quaternion.Lerp(transform.root.rotation, Quaternion.Euler(rotGoal), Time.deltaTime * rotSpeed);
         angleInputDifference.rotation = Quaternion.Euler(rotGoal + new Vector3(0, 180, 0));
     }
 

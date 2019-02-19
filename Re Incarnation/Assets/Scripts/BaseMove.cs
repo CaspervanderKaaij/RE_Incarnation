@@ -6,6 +6,7 @@ using UnityEngine.Events;
 public class BaseMove : MonoBehaviour
 {
 
+    [SerializeField] string reminderInputName = "Set name of move here";
     [Header("BaseMove")]
     [SerializeField] float speed = 30;
     [HideInInspector] public CharacterController cc;
@@ -13,9 +14,12 @@ public class BaseMove : MonoBehaviour
     [SerializeField] float moveTime = 0.3f;
     [SerializeField] string animationName = "Roll";
     [SerializeField] UnityEvent endEvent;
+    [Header("Set which inputs to check for during move here")]
     [SerializeField] InputEvent[] inputs;
     [SerializeField] float inputIgnoreTime = 0.3f;
+    [Header("---Spawn Particles Here---")]
     [SerializeField] UnityEvent startEvent;
+    [SerializeField] bool canInterupt = false;
     public virtual void Move()
     {
         moveV3.x = transform.TransformDirection(0, 0, 1).x * speed;
@@ -44,18 +48,34 @@ public class BaseMove : MonoBehaviour
     {
         if (cc == null)
         {
-            cc = GetComponent<CharacterController>();
+            cc = transform.root.GetComponent<CharacterController>();
         }
         cc.Move(moveV3 * Time.deltaTime);
     }
 
     public virtual void StartMove()
     {
-        if (IsInvoking("StopMove") == false && IsInvoking("IgnoreInput") == false)
+        bool doStuff = false;
+        if (canInterupt == false)
         {
+            if (IsInvoking("StopMove") == false && IsInvoking("IgnoreInput") == false)
+            {
+                doStuff = true;
+            }
+        }
+        else if (IsInvoking("IgnoreInput") == false)
+        {
+            doStuff = true;
+        }
+
+        if (doStuff == true)
+        {
+            CancelInvoke("StopMove");
+            CancelInvoke("IgnoreInput");
             Invoke("StopMove", moveTime);
-            cc = GetComponent<CharacterController>();
-            BaseMove[] moves = GetComponents<BaseMove>();
+            Invoke("IgnoreInput", inputIgnoreTime);
+            cc = transform.root.GetComponent<CharacterController>();
+            BaseMove[] moves = transform.root.GetComponentsInChildren<BaseMove>();
             for (int i = 0; i < moves.Length; i++)
             {
                 if (moves[i] != this)
@@ -67,18 +87,19 @@ public class BaseMove : MonoBehaviour
                     moves[i].enabled = true;
                 }
             }
-            GetComponentInChildren<Animator>().Play(animationName);
+            transform.root.GetComponentInChildren<Animator>().PlayInFixedTime(animationName, 0, 0);
             startEvent.Invoke();
+
         }
     }
 
     void StopMove()
     {
         endEvent.Invoke();
-        Invoke("IgnoreInput",inputIgnoreTime);
     }
 
-    void IgnoreInput(){
+    void IgnoreInput()
+    {
         //empry because of invoking. I use it to check if its invoking, if so, ignore input
     }
 }
