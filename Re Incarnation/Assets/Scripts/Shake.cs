@@ -16,7 +16,7 @@ public class Shake : MonoBehaviour
     {
         if (GetComponent<PostProcessingBehaviour>() != null)
         {
-            pp = GetComponent<PostProcessingBehaviour>();
+            pp = FindObjectOfType<PostProcessingBehaviour>();
             pp.profile.motionBlur.enabled = false;
         }
     }
@@ -37,7 +37,10 @@ public class Shake : MonoBehaviour
         shakestr = strength;
         Invoke("StopShake", time);
         normalRot = transform.eulerAngles;
-        pp.profile.motionBlur.enabled = true;
+        if (pp != null)
+        {
+            pp.profile.motionBlur.enabled = true;
+        }
     }
 
     public void SmallShake()
@@ -58,7 +61,10 @@ public class Shake : MonoBehaviour
     void StopShake()
     {
         isShaking = false;
-        pp.profile.motionBlur.enabled = false;
+        if (pp != null)
+        {
+            pp.profile.motionBlur.enabled = false;
+        }
         transform.eulerAngles = normalRot;
     }
 
