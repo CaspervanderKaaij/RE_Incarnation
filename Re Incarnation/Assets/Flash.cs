@@ -20,7 +20,10 @@ public class Flash : MonoBehaviour
     {
         lerpSpeed = speed;
         Image rend = GetComponent<Image>();
-        originalColor = rend.color;
+        if (IsInvoking("GoBackImg") == false)
+        {
+            originalColor = rend.color;
+        }
         rend.color = newColor;
         InvokeRepeating("GoBackImg", waitTime, Time.unscaledDeltaTime);
     }
@@ -29,7 +32,10 @@ public class Flash : MonoBehaviour
     {
         lerpSpeed = speed;
         Text rend = GetComponent<Text>();
-        originalColor = rend.color;
+        if (IsInvoking("GoBackTxt") == false)
+        {
+            originalColor = rend.color;
+        }
         rend.color = newColor;
         InvokeRepeating("GoBackTxt", waitTime, Time.unscaledDeltaTime);
     }
@@ -38,7 +44,10 @@ public class Flash : MonoBehaviour
     {
         lerpSpeed = speed;
         Material rend = GetComponent<Renderer>().material;
-        originalColor = rend.color;
+        if (IsInvoking("GoBackMat") == false)
+        {
+            originalColor = rend.color;
+        }
         rend.color = newColor;
         InvokeRepeating("GoBackMat", waitTime, Time.unscaledDeltaTime);
     }

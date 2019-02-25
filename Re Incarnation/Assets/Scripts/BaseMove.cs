@@ -19,6 +19,7 @@ public class BaseMove : MonoBehaviour
     [SerializeField] float inputIgnoreTime = 0.3f;
     [Header("---Spawn Particles Here---")]
     [SerializeField] UnityEvent startEvent;
+    [SerializeField] EventArray[] timedEvents;
     [SerializeField] bool canInterupt = false;
     public virtual void Move()
     {
@@ -89,8 +90,20 @@ public class BaseMove : MonoBehaviour
             }
             transform.root.GetComponentInChildren<Animator>().PlayInFixedTime(animationName, 0, 0);
             startEvent.Invoke();
+            float totalTime = 0;
+            for (int i = 0; i < timedEvents.Length; i++)
+            {
+                totalTime += timedEvents[i].nextEvent;
+                StartCoroutine(TimedEvents(timedEvents[i].curEvent, totalTime));
+            }
 
         }
+    }
+
+    IEnumerator TimedEvents(UnityEvent ev, float time)
+    {
+        yield return new WaitForSeconds(time);
+        ev.Invoke();
     }
 
     void StopMove()
@@ -102,4 +115,11 @@ public class BaseMove : MonoBehaviour
     {
         //empry because of invoking. I use it to check if its invoking, if so, ignore input
     }
+}
+
+[System.Serializable]
+public class EventArray
+{
+    public float nextEvent = 1;
+    public UnityEvent curEvent;
 }

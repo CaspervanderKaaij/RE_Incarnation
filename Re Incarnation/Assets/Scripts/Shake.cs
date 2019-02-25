@@ -16,7 +16,7 @@ public class Shake : MonoBehaviour
     {
         if (GetComponent<PostProcessingBehaviour>() != null)
         {
-            pp = FindObjectOfType<PostProcessingBehaviour>();
+            pp = Camera.main.GetComponent<PostProcessingBehaviour>();
             pp.profile.motionBlur.enabled = false;
         }
     }
