@@ -20,10 +20,12 @@ public class NormalWalking : BaseMove
     Animator anim;
     [SerializeField] float gravityStrength = -9.81f;
     [SerializeField] float gravityPullSpeed = 10;
+    bool rotateHelp = false;
+    Transform lastParent;
 
     void Start()
     {
-        anim = transform.root.GetComponentInChildren<Animator>();
+        anim = cc.GetComponentInChildren<Animator>();
     }
     void Update()
     {
@@ -48,13 +50,34 @@ public class NormalWalking : BaseMove
     void SetRotation()
     {
         Vector2 inputV2 = new Vector2(Input.GetAxis(vertInputName), Input.GetAxis(horInputName));
+        // print(cc.transform.parent.localEulerAngles.y);
         if (Vector2.SqrMagnitude(inputV2) != 0)
         {
-            rotGoal = new Vector3(0, Mathf.Atan2(inputV2.y, inputV2.x) * Mathf.Rad2Deg, 0);
+            if (cc.transform.parent != null)
+            {
+                rotGoal = new Vector3(0, cc.transform.parent.InverseTransformDirection(0, Mathf.Atan2(inputV2.y, inputV2.x) * Mathf.Rad2Deg, 0).y - cc.transform.parent.eulerAngles.y, 0);
+            }
+            else
+            {
+                rotGoal = new Vector3(0, Mathf.Atan2(inputV2.y, inputV2.x) * Mathf.Rad2Deg, 0);
+            }
         }
 
-        transform.root.rotation = Quaternion.Lerp(transform.root.rotation, Quaternion.Euler(rotGoal), Time.deltaTime * rotSpeed);
-        angleInputDifference.rotation = Quaternion.Euler(rotGoal + new Vector3(0, 180, 0));
+        //used for when parented, ignore moving toward rotation, until you update it with an input, otherwise the player would look to the wrong direction after getting parented.
+        if (rotateHelp == true && Vector2.SqrMagnitude(inputV2) != 0)
+        {
+            rotateHelp = false;
+        }
+        if (cc.transform.parent != lastParent && Vector2.SqrMagnitude(inputV2) == 0)
+        {
+            rotateHelp = true;
+        }
+        lastParent = cc.transform.parent;
+        if (rotateHelp == false)
+        {
+            cc.transform.localRotation = Quaternion.Lerp(cc.transform.localRotation, Quaternion.Euler(rotGoal), Time.deltaTime * rotSpeed);
+            angleInputDifference.rotation = Quaternion.Euler(rotGoal + new Vector3(0, 180, 0));
+        }
     }
 
     void MoveForward()
@@ -74,7 +97,10 @@ public class NormalWalking : BaseMove
 
         //Makes you go slower when turning around
 
-        float floatDifferenceAngle = Quaternion.Angle(transform.rotation, angleInputDifference.rotation) / 180;
+        float floatDifferenceAngle = Quaternion.Angle(cc.transform.localRotation, angleInputDifference.rotation) / 180;
+        if(rotateHelp == true){
+            floatDifferenceAngle = 1;//ignore when just parented, and no input pressed yet
+        }
         if (floatDifferenceAngle < 0.5f)
         {
             //  floatDifferenceAngle = 0;
@@ -89,8 +115,9 @@ public class NormalWalking : BaseMove
 
     void Gravity()
     {
-        moveV3.y = Mathf.MoveTowards(moveV3.y,gravityStrength,Time.deltaTime * gravityPullSpeed);
-        if(cc.isGrounded == true){
+        moveV3.y = Mathf.MoveTowards(moveV3.y, gravityStrength, Time.deltaTime * gravityPullSpeed);
+        if (cc.isGrounded == true)
+        {
             moveV3.y = gravityStrength / 3;
         }
     }

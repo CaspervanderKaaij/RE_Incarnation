@@ -9,7 +9,7 @@ public class BaseMove : MonoBehaviour
     [SerializeField] string reminderInputName = "Set name of move here";
     [Header("BaseMove")]
     [SerializeField] float speed = 30;
-    [HideInInspector] public CharacterController cc;
+    public CharacterController cc;
     [HideInInspector] public Vector3 moveV3 = Vector3.zero;
     [SerializeField] float moveTime = 0.3f;
     [SerializeField] string animationName = "Roll";
@@ -47,10 +47,6 @@ public class BaseMove : MonoBehaviour
 
     public void FinalMove()
     {
-        if (cc == null)
-        {
-            cc = transform.root.GetComponent<CharacterController>();
-        }
         cc.Move(moveV3 * Time.deltaTime);
     }
 
@@ -75,8 +71,8 @@ public class BaseMove : MonoBehaviour
             CancelInvoke("IgnoreInput");
             Invoke("StopMove", moveTime);
             Invoke("IgnoreInput", inputIgnoreTime);
-            cc = transform.root.GetComponent<CharacterController>();
-            BaseMove[] moves = transform.root.GetComponentsInChildren<BaseMove>();
+           // cc = transform.root.GetComponent<CharacterController>();
+            BaseMove[] moves = cc.GetComponentsInChildren<BaseMove>();
             for (int i = 0; i < moves.Length; i++)
             {
                 if (moves[i] != this)
@@ -88,7 +84,7 @@ public class BaseMove : MonoBehaviour
                     moves[i].enabled = true;
                 }
             }
-            transform.root.GetComponentInChildren<Animator>().PlayInFixedTime(animationName, 0, 0);
+            cc.GetComponentInChildren<Animator>().PlayInFixedTime(animationName, 0, 0);
             startEvent.Invoke();
             float totalTime = 0;
             for (int i = 0; i < timedEvents.Length; i++)

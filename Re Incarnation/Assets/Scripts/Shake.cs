@@ -10,6 +10,7 @@ public class Shake : MonoBehaviour
     Vector3 normalRot;
     float shakestr = 0.5f;
     PostProcessingBehaviour pp;
+    [SerializeField] float shakeScale = 1;
 
 
     void Start()
@@ -70,6 +71,7 @@ public class Shake : MonoBehaviour
 
     void Shaking(float str)
     {
+        str *= shakeScale;
         transform.localEulerAngles = new Vector3(normalRot.x + Random.Range(-str, str), normalRot.y + Random.Range(-str, str), Random.Range(-str, str));
     }
 }
