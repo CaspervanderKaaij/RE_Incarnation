@@ -17,6 +17,7 @@ public class Cam : MonoBehaviour
     void Start()
     {
         cam = GetComponent<Camera>();
+        transform.position = GetCenterOfObjects(players.ToArray()) + offset;
     }
 
     void Update()
