@@ -98,7 +98,8 @@ public class NormalWalking : BaseMove
         //Makes you go slower when turning around
 
         float floatDifferenceAngle = Quaternion.Angle(cc.transform.localRotation, angleInputDifference.rotation) / 180;
-        if(rotateHelp == true){
+        if (rotateHelp == true)
+        {
             floatDifferenceAngle = 1;//ignore when just parented, and no input pressed yet
         }
         if (floatDifferenceAngle < 0.5f)
@@ -118,25 +119,53 @@ public class NormalWalking : BaseMove
         moveV3.y = Mathf.MoveTowards(moveV3.y, gravityStrength, Time.deltaTime * gravityPullSpeed);
         if (cc.isGrounded == true)
         {
-            moveV3.y = gravityStrength / 3;
+            CancelInvoke("FallAnim");
+        }
+        else
+        {
+            if (anim.GetInteger("NextMove") != 3 && IsInvoking("FallAnim") == false)
+            {
+                Invoke("FallAnim", 0.01f);
+            }
+            if (IsInvoking("FallAnim") == true && anim.GetCurrentAnimatorStateInfo(0).IsTag("Roll") == true)
+            {
+                moveV3.y = gravityStrength / 3;
+                if (anim.GetCurrentAnimatorStateInfo(0).IsTag("Roll") == true)
+                {
+                    CancelInvoke("FallAnim");
+                }
+            }
+        }
+    }
+
+    void FallAnim()
+    {
+        if (this.enabled == true)
+        {
+            anim.SetInteger("NextMove", 3);
+            anim.Play("Fall", 0);
         }
     }
 
     void SetAnimWalkIdle(Animator anim, float walkSpeed)
     {
-        anim.SetInteger("NextMove", 0);
-        if (anim.GetCurrentAnimatorStateInfo(0).IsTag("Idle") == true)
+        //function primaily used for walk, idle and fall animation
+        if (cc.isGrounded == true)
         {
-            if (walkSpeed > 0.05f)
+            anim.SetInteger("NextMove", 0);
+            if (anim.GetCurrentAnimatorStateInfo(0).IsTag("Idle") == true)
             {
-                anim.SetInteger("NextMove", 1);
+                if (walkSpeed > 0.05f)
+                {
+                    anim.SetInteger("NextMove", 1);
+                }
             }
-        }
-        else if (anim.GetCurrentAnimatorStateInfo(0).IsTag("Walk") == true)
-        {
-            if (walkSpeed < 0.05f)
+            else if (anim.GetCurrentAnimatorStateInfo(0).IsTag("Walk") == true)
             {
-                anim.SetInteger("NextMove", 1);
+                if (walkSpeed < 0.05f)
+                {
+                    anim.SetInteger("NextMove", 1);
+                }
             }
         }
     }

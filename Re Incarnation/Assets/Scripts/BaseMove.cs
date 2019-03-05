@@ -21,13 +21,14 @@ public class BaseMove : MonoBehaviour
     [SerializeField] UnityEvent startEvent;
     [SerializeField] EventArray[] timedEvents;
     [SerializeField] bool canInterupt = false;
+    [SerializeField] bool mustBeGrounded = true;
     public virtual void Move()
     {
         moveV3.x = transform.TransformDirection(0, 0, 1).x * speed;
         moveV3.z = transform.TransformDirection(0, 0, 1).z * speed;
     }
 
-    void Update()
+    void LateUpdate()
     {
         if (IsInvoking("StopMove") == true)
         {
@@ -41,7 +42,10 @@ public class BaseMove : MonoBehaviour
     {
         for (int i = 0; i < inputs.Length; i++)
         {
-            inputs[i].CheckInput();
+            if (inputs[i].gameObject.activeSelf == true)
+            {
+                inputs[i].CheckInput();
+            }
         }
     }
 
@@ -65,13 +69,18 @@ public class BaseMove : MonoBehaviour
             doStuff = true;
         }
 
+        if (mustBeGrounded == true && cc.GetComponentInChildren<Animator>().GetCurrentAnimatorStateInfo(0).IsTag("Fall") == true)
+        {
+            doStuff = false;
+        }
+
         if (doStuff == true)
         {
             CancelInvoke("StopMove");
             CancelInvoke("IgnoreInput");
             Invoke("StopMove", moveTime);
             Invoke("IgnoreInput", inputIgnoreTime);
-           // cc = transform.root.GetComponent<CharacterController>();
+            // cc = transform.root.GetComponent<CharacterController>();
             BaseMove[] moves = cc.GetComponentsInChildren<BaseMove>();
             for (int i = 0; i < moves.Length; i++)
             {

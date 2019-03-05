@@ -38,7 +38,7 @@ public class AreaNameText : MonoBehaviour
         alphaSpeed = 3;
         InvokeRepeating("LerpColor", 0, Time.deltaTime);
         scaleGoal = startScale;
-        transform.localScale = startScale / 1.5f;
+        transform.localScale = startScale / 1.35f;
         speed = 0.25f;
         InvokeRepeating("LerpScale", 0, Time.deltaTime);
         yield return new WaitForSeconds(3);

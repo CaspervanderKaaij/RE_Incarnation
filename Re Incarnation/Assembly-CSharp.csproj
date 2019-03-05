@@ -53,10 +53,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-     <Compile Include="Assets\AreaNameText.cs" />
-     <Compile Include="Assets\CollisionEvent.cs" />
-     <Compile Include="Assets\FadeImg.cs" />
-     <Compile Include="Assets\LoadLevel.cs" />
      <Compile Include="Assets\PostProcessing\Runtime\Attributes\GetSetAttribute.cs" />
      <Compile Include="Assets\PostProcessing\Runtime\Attributes\MinAttribute.cs" />
      <Compile Include="Assets\PostProcessing\Runtime\Attributes\TrackballAttribute.cs" />
@@ -102,14 +98,19 @@
      <Compile Include="Assets\PostProcessing\Runtime\Utils\MaterialFactory.cs" />
      <Compile Include="Assets\PostProcessing\Runtime\Utils\RenderTextureFactory.cs" />
      <Compile Include="Assets\PostProcessing\Utilities\CustomMotionTexture\ExampleWheelController.cs" />
+     <Compile Include="Assets\Scripts\AreaNameText.cs" />
      <Compile Include="Assets\Scripts\AutoRotate.cs" />
      <Compile Include="Assets\Scripts\BaseMove.cs" />
      <Compile Include="Assets\Scripts\Cam.cs" />
+     <Compile Include="Assets\Scripts\ClickableUI.cs" />
+     <Compile Include="Assets\Scripts\CollisionEvent.cs" />
+     <Compile Include="Assets\Scripts\FadeImg.cs" />
      <Compile Include="Assets\Scripts\Flash.cs" />
      <Compile Include="Assets\Scripts\Hitbox.cs" />
      <Compile Include="Assets\Scripts\Hurtbox.cs" />
      <Compile Include="Assets\Scripts\IgnoreRotation.cs" />
      <Compile Include="Assets\Scripts\InputEvent.cs" />
+     <Compile Include="Assets\Scripts\LoadLevel.cs" />
      <Compile Include="Assets\Scripts\MovementTest.cs" />
      <Compile Include="Assets\Scripts\NormalWalking.cs" />
      <Compile Include="Assets\Scripts\PlayerParenter.cs" />
@@ -117,9 +118,11 @@
      <Compile Include="Assets\Scripts\RNGRotation.cs" />
      <Compile Include="Assets\Scripts\Roll.cs" />
      <Compile Include="Assets\Scripts\Shake.cs" />
+     <Compile Include="Assets\Scripts\SwitchWeapon.cs" />
      <Compile Include="Assets\Scripts\TimeScaleManager.cs" />
      <Compile Include="Assets\Scripts\UIPercentBar.cs" />
      <Compile Include="Assets\Scripts\VFXSpawner.cs" />
+     <Compile Include="Assets\Scripts\VNDialogue.cs" />
      <Compile Include="Assets\Scripts\WebcamRender.cs" />
      <None Include="Assets\PostProcessing\Resources\Shaders\DepthOfField.shader" />
      <None Include="Assets\PostProcessing\Resources\Shaders\MotionBlur.cginc" />

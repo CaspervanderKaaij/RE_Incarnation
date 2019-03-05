@@ -17,6 +17,6 @@ public float speed = 1;
 	void Update () {
 		transform.position += tranformV3 * speed * Time.deltaTime;
 		transform.Rotate(eulerV3 * speed * Time.deltaTime);
-		transform.localScale += scaleV3 * speed * Time.deltaTime;
+		transform.localScale = Vector3.Lerp(transform.localScale,scaleV3, speed * Time.deltaTime);
 	}
 }

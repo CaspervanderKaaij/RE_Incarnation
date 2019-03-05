@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.Events;
 public class FadeImg : MonoBehaviour
 {
     [SerializeField] Color goalColor;
@@ -9,18 +10,24 @@ public class FadeImg : MonoBehaviour
     Image image;
     bool scaledTime = false;
     [SerializeField] float speed;
-    bool started = false;
+    [SerializeField] float waitTime = 0.1f;
+    [SerializeField] UnityEvent endEvent;
 
     void Start()
     {
         image = GetComponent<Image>();
         image.color = startColor;
-        started = false;
+        Invoke("Wait", waitTime);
+    }
+
+    void Wait()
+    {
+        //invoke
     }
 
     void Update()
     {
-        if (started == false)
+        if (IsInvoking("Wait") == false)
         {
             if (scaledTime == true)
             {
@@ -30,10 +37,10 @@ public class FadeImg : MonoBehaviour
             {
                 image.color = Color.Lerp(image.color, goalColor, Time.unscaledDeltaTime * speed);
             }
-        }
-        else
-        {
-            started = true;
+            if (image.color == goalColor)
+            {
+                endEvent.Invoke();
+            }
         }
     }
     public void SetSpeed(float newSpeed)

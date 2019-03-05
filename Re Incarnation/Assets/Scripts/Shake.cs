@@ -7,10 +7,10 @@ public class Shake : MonoBehaviour
 {
 
     bool isShaking = false;
-    Vector3 normalRot;
     float shakestr = 0.5f;
     PostProcessingBehaviour pp;
     [SerializeField] float shakeScale = 1;
+    Vector3 rngRemover;
 
 
     void Start()
@@ -37,7 +37,8 @@ public class Shake : MonoBehaviour
         isShaking = true;
         shakestr = strength;
         Invoke("StopShake", time);
-        normalRot = transform.eulerAngles;
+        transform.eulerAngles -= rngRemover;
+        rngRemover = Vector3.zero;
         if (pp != null)
         {
             pp.profile.motionBlur.enabled = true;
@@ -66,12 +67,15 @@ public class Shake : MonoBehaviour
         {
             pp.profile.motionBlur.enabled = false;
         }
-        transform.eulerAngles = normalRot;
+        transform.eulerAngles -= rngRemover;
+        rngRemover = Vector3.zero;
     }
 
     void Shaking(float str)
     {
+        transform.eulerAngles -= rngRemover;
         str *= shakeScale;
-        transform.localEulerAngles = new Vector3(normalRot.x + Random.Range(-str, str), normalRot.y + Random.Range(-str, str), Random.Range(-str, str));
+        rngRemover = new Vector3(Random.Range(-str, str),Random.Range(-str, str),Random.Range(-str, str));
+        transform.localEulerAngles = new Vector3(transform.eulerAngles.x + rngRemover.x, transform.eulerAngles.y + rngRemover.y, rngRemover.z);
     }
 }
