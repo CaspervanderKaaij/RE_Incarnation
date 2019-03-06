@@ -26,6 +26,7 @@ public class NormalWalking : BaseMove
     void Start()
     {
         anim = cc.GetComponentInChildren<Animator>();
+        InvokeRepeating("FallAnimChecker", 0, 0.1f);
     }
     void Update()
     {
@@ -144,6 +145,15 @@ public class NormalWalking : BaseMove
         {
             anim.SetInteger("NextMove", 3);
             anim.Play("Fall", 0);
+        }
+    }
+
+    void FallAnimChecker()
+    {
+        if (this.enabled == false)
+        {
+            anim.SetInteger("NextMove", 0);
+            CancelInvoke("FallAnim");
         }
     }
 
