@@ -5,7 +5,7 @@ using UnityEngine;
 public class NormalWalking : BaseMove
 {
 
-    Vector3 rotGoal;
+    [HideInInspector] public Vector3 rotGoal;
     [Header("NormalWalking")]
     [SerializeField] float rotSpeed = 10;
     [SerializeField] float walkingSpeed = 10;
@@ -118,15 +118,11 @@ public class NormalWalking : BaseMove
     void Gravity()
     {
         moveV3.y = Mathf.MoveTowards(moveV3.y, gravityStrength, Time.deltaTime * gravityPullSpeed);
-        if (cc.isGrounded == true)
-        {
-            CancelInvoke("FallAnim");
-        }
-        else
+        if (Physics.Raycast(transform.position, Vector3.down, 0.5f, LayerMask.GetMask("Default")) == false && cc.isGrounded == false)
         {
             if (anim.GetInteger("NextMove") != 3 && IsInvoking("FallAnim") == false)
             {
-                Invoke("FallAnim", 0.01f);
+                Invoke("FallAnim", 0.05f);
             }
             if (IsInvoking("FallAnim") == true && anim.GetCurrentAnimatorStateInfo(0).IsTag("Roll") == true)
             {
@@ -136,6 +132,10 @@ public class NormalWalking : BaseMove
                     CancelInvoke("FallAnim");
                 }
             }
+        }
+        else
+        {
+            CancelInvoke("FallAnim");
         }
     }
 
@@ -160,7 +160,7 @@ public class NormalWalking : BaseMove
     void SetAnimWalkIdle(Animator anim, float walkSpeed)
     {
         //function primaily used for walk, idle and fall animation
-        if (cc.isGrounded == true)
+        if (Physics.Raycast(transform.position, Vector3.down, 0.5f, LayerMask.GetMask("Default")) == true || cc.isGrounded == true)
         {
             anim.SetInteger("NextMove", 0);
             if (anim.GetCurrentAnimatorStateInfo(0).IsTag("Idle") == true)

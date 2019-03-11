@@ -12,6 +12,7 @@ public class Hitbox : MonoBehaviour
     public HitEvent hitEvent;
     [SerializeField] float invincibleTime = 0f;
     public UnityEvent deathEvent;
+    [SerializeField] EventArray[] timedEvents;
 
     void Start()
     {
@@ -33,9 +34,25 @@ public class Hitbox : MonoBehaviour
             {
                 Die();
             }
-            Invoke("Invincible", invincibleTime);
+            else
+            {
+                Invoke("Invincible", invincibleTime);
+
+                float totalTime = 0;
+                for (int i = 0; i < timedEvents.Length; i++)
+                {
+                    totalTime += timedEvents[i].nextEvent;
+                    StartCoroutine(TimedEvents(timedEvents[i].curEvent, totalTime));
+                }
+            }
         }
 
+    }
+
+    IEnumerator TimedEvents(UnityEvent ev, float time)
+    {
+        yield return new WaitForSeconds(time);
+        ev.Invoke();
     }
 
     void Invincible()
@@ -52,8 +69,8 @@ public class Hitbox : MonoBehaviour
 
     public virtual void Die()
     {
-      //  Destroy(transform.root.gameObject);
-      deathEvent.Invoke();
+        //  Destroy(transform.root.gameObject);
+        deathEvent.Invoke();
     }
 }
 

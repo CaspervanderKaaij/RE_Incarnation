@@ -29,6 +29,7 @@ ModelImporter:
     100046: Cube_001
     100048: Cube_002
     100050: NeptuneSchool
+    100052: MarvelousAQL
     400000: //RootNode
     400002: Armature
     400004: Bone
@@ -55,15 +56,21 @@ ModelImporter:
     400046: Cube_001
     400048: Cube_002
     400050: NeptuneSchool
+    400052: MarvelousAQL
     2100000: unnamed
     2100002: Hair
     2100004: Accessory
+    2100006: Material__438
+    2100008: Material__439
     2300000: //RootNode
+    2300002: MarvelousAQL
     3300000: //RootNode
+    3300002: MarvelousAQL
     4300000: Cube
     4300002: Cube_001
     4300004: Cube_002
     4300006: NeptuneSchool
+    4300008: MarvelousAQL
     7400000: Idle
     7400002: Walk
     7400004: Roll
@@ -84,11 +91,14 @@ ModelImporter:
     7400034: ScytheAttack3Attack
     7400036: ScytheAttack3End
     7400038: Fall
+    7400040: ShootCharge
     9500000: //RootNode
     13700000: Cube
     13700002: Cube_001
     13700004: Cube_002
     13700006: NeptuneSchool
+    13700008: MarvelousAQL
+    2186277476908879412: ImportLogs
   externalObjects: {}
   materials:
     importMaterials: 1
@@ -232,7 +242,7 @@ ModelImporter:
     - serializedVersion: 16
       name: Shoot
       takeName: ArmatureAction
-      firstFrame: 164
+      firstFrame: 167
       lastFrame: 179
       wrapMode: 0
       orientationOffsetY: 0
@@ -402,6 +412,34 @@ ModelImporter:
       takeName: Default Take
       firstFrame: 365
       lastFrame: 383
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 0
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask: []
+      maskType: 3
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
+    - serializedVersion: 16
+      name: ShootCharge
+      takeName: ArmatureAction
+      firstFrame: 164
+      lastFrame: 166
       wrapMode: 0
       orientationOffsetY: 0
       level: 0

@@ -22,10 +22,38 @@ public class BaseMove : MonoBehaviour
     [SerializeField] EventArray[] timedEvents;
     [SerializeField] bool canInterupt = false;
     [SerializeField] bool mustBeGrounded = true;
+    [SerializeField] bool disableWhenNotActive = true;
+    [SerializeField] float rotateSpeed = 0;
+    NormalWalking normalWalking;
     public virtual void Move()
     {
         moveV3.x = transform.TransformDirection(0, 0, 1).x * speed;
         moveV3.z = transform.TransformDirection(0, 0, 1).z * speed;
+
+         Vector2 inputV2 = new Vector2(Input.GetAxis("Vertical_P1"), Input.GetAxis("Horizontal_P1"));
+         Vector3 rotGoal = cc.transform.localRotation.eulerAngles;
+        // print(cc.transform.parent.localEulerAngles.y);
+        if (Vector2.SqrMagnitude(inputV2) != 0)
+        {
+            if (cc.transform.parent != null)
+            {
+                rotGoal = new Vector3(0, cc.transform.parent.InverseTransformDirection(0, Mathf.Atan2(inputV2.y, inputV2.x) * Mathf.Rad2Deg, 0).y - cc.transform.parent.eulerAngles.y, 0);
+            }
+            else
+            {
+                rotGoal = new Vector3(0, Mathf.Atan2(inputV2.y, inputV2.x) * Mathf.Rad2Deg, 0);
+            }
+        }
+        normalWalking.rotGoal = rotGoal;
+        cc.transform.localRotation = Quaternion.Lerp(cc.transform.localRotation, Quaternion.Euler(rotGoal), Time.deltaTime * rotateSpeed);
+    }
+
+    public void SetRotSpeed(float newSpeed){
+        rotateSpeed = newSpeed;
+    }
+
+      public void SetSpeed(float newSpeed){
+        speed = newSpeed;
     }
 
     void LateUpdate()
@@ -34,8 +62,16 @@ public class BaseMove : MonoBehaviour
         {
             Move();
             FinalMove();
+            //  print(transform.name);
         }
-        SetInputs();
+        else if (disableWhenNotActive == true)
+        {
+            this.enabled = false;
+        }
+        if (IsInvoking("IgnoreInput") == false)
+        {
+            SetInputs();
+        }
     }
 
     public void SetInputs()
@@ -56,6 +92,7 @@ public class BaseMove : MonoBehaviour
 
     public virtual void StartMove()
     {
+        normalWalking = cc.gameObject.GetComponentInChildren<NormalWalking>();
         bool doStuff = false;
         if (canInterupt == false)
         {
@@ -113,7 +150,10 @@ public class BaseMove : MonoBehaviour
 
     void StopMove()
     {
-        endEvent.Invoke();
+        if (this.enabled == true)
+        {
+            endEvent.Invoke();
+        }
     }
 
     void IgnoreInput()
