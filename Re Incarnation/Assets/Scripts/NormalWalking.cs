@@ -15,8 +15,8 @@ public class NormalWalking : BaseMove
     [SerializeField] Transform angleInputDifference;
     float currentAngleAcceleration = 0;
     Vector2 lastXZPos = Vector2.zero;//this is used to check if the walk animation should play.
-    [SerializeField] string horInputName = "Horizontal_P1";
-    [SerializeField] string vertInputName = "Vertical_P1";
+    public string horInputName = "Horizontal_P1";
+    public string vertInputName = "Vertical_P1";
     Animator anim;
     [SerializeField] float gravityStrength = -9.81f;
     [SerializeField] float gravityPullSpeed = 10;
@@ -62,7 +62,9 @@ public class NormalWalking : BaseMove
             {
                 rotGoal = new Vector3(0, Mathf.Atan2(inputV2.y, inputV2.x) * Mathf.Rad2Deg, 0);
             }
+            rotGoal.y += Camera.main.transform.eulerAngles.y;
         }
+
 
         //used for when parented, ignore moving toward rotation, until you update it with an input, otherwise the player would look to the wrong direction after getting parented.
         if (rotateHelp == true && Vector2.SqrMagnitude(inputV2) != 0)

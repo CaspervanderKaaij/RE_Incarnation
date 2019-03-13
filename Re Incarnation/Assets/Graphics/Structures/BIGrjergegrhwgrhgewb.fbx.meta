@@ -514,6 +514,9 @@ ModelImporter:
     101016: Cube.002_cell.050
     101018: Cube.003
     101020: Lamp
+    101022: Cube.004
+    101024: Cube.005
+    101026: Cube.006
     400000: //RootNode
     400002: Camera
     400004: Cube
@@ -1025,10 +1028,14 @@ ModelImporter:
     401016: Cube.002_cell.050
     401018: Cube.003
     401020: Lamp
+    401022: Cube.004
+    401024: Cube.005
+    401026: Cube.006
     2000000: Camera
     2100000: Material
     2100002: Material.002
     2100004: Material.001
+    2100006: Material.002(2)
     2300000: Cube
     2300002: Cube.001
     2300004: Cube.001_cell.001_cell
@@ -1537,6 +1544,10 @@ ModelImporter:
     2301010: Cube.002_cell.049
     2301012: Cube.002_cell.050
     2301014: Cube.003
+    2301016: Cube.004
+    2301018: //RootNode
+    2301020: Cube.005
+    2301022: Cube.006
     3300000: Cube
     3300002: Cube.001
     3300004: Cube.001_cell.001_cell
@@ -2045,6 +2056,10 @@ ModelImporter:
     3301010: Cube.002_cell.049
     3301012: Cube.002_cell.050
     3301014: Cube.003
+    3301016: Cube.004
+    3301018: //RootNode
+    3301020: Cube.005
+    3301022: Cube.006
     4300000: Cube.002_cell.033_cell.011
     4300002: Cube.002_cell.033_cell.010
     4300004: Cube.002_cell.033_cell.009
@@ -2553,6 +2568,9 @@ ModelImporter:
     4301010: Cube.002
     4301012: Cube.001
     4301014: Cube
+    4301016: Cube.004
+    4301018: Cube.005
+    4301020: Cube.006
     10800000: Lamp
     2186277476908879412: ImportLogs
   externalObjects: {}
@@ -2589,6 +2607,7 @@ ModelImporter:
     globalScale: 1
     meshCompression: 0
     addColliders: 0
+    useSRGBMaterialColor: 1
     importVisibility: 1
     importBlendShapes: 1
     importCameras: 1
@@ -2613,6 +2632,9 @@ ModelImporter:
     normalImportMode: 0
     tangentImportMode: 3
     normalCalculationMode: 4
+    legacyComputeAllNormalsFromSmoothingGroupsWhenMeshHasBlendShapes: 0
+    blendShapeNormalImportMode: 1
+    normalSmoothingSource: 0
   importAnimation: 1
   copyAvatar: 0
   humanDescription:

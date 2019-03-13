@@ -5,15 +5,19 @@ using UnityEngine;
 public class IgnoreRotation : MonoBehaviour
 {
 
-    Quaternion startRot;
+    Vector3 startRot;
+    [SerializeField] Transform relativeTo;
 
     void Start()
     {
-        startRot = transform.rotation;
+        startRot = transform.eulerAngles;
     }
 
     void LateUpdate()
     {
-        transform.rotation = startRot;
+        transform.eulerAngles = startRot;
+        if(relativeTo != null){
+             transform.eulerAngles = startRot + relativeTo.eulerAngles;
+        }
     }
 }

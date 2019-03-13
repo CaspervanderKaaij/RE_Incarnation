@@ -37,7 +37,6 @@ public class Hitbox : MonoBehaviour
             else
             {
                 Invoke("Invincible", invincibleTime);
-
                 float totalTime = 0;
                 for (int i = 0; i < timedEvents.Length; i++)
                 {
@@ -47,6 +46,12 @@ public class Hitbox : MonoBehaviour
             }
         }
 
+    }
+
+    public void AddHealth(int toAdd)
+    {
+        curHealth += toAdd;
+        curHealth = Mathf.Min(curHealth, maxHealth);
     }
 
     IEnumerator TimedEvents(UnityEvent ev, float time)
@@ -62,6 +67,7 @@ public class Hitbox : MonoBehaviour
 
     public void HealthEvent(float value)
     {
+        hitEvent.RemoveAllListeners();
         hitEvent.AddListener(HealthEvent);
     }
 

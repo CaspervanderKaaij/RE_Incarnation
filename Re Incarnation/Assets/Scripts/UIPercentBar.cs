@@ -16,6 +16,7 @@ RectTransform rect;
 	}
 	
 	void Update () {
+		curPercent = Mathf.Max(curPercent,0);
 		rect.localScale = new Vector3(Mathf.Lerp(rect.localScale.x ,maxScale * (curPercent / 100),lerpSpeed * Time.unscaledDeltaTime),rect.localScale.y,rect.localScale.z);
 	}
 

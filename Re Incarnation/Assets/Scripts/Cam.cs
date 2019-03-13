@@ -4,16 +4,28 @@ using UnityEngine;
 
 public class Cam : MonoBehaviour
 {
+    public enum State
+    {
+        Normal,
+        AtTrans
+    }
+    [SerializeField] State curState = State.Normal;
     List<GameObject> players = new List<GameObject>();
-	[Header("Camera")]
+    [Header("Normal State")]
+    [Space]
+    [Header("   Camera")]
     [SerializeField] Vector3 offset;
     [SerializeField] float speed = 10;
     Camera cam;
-	[Header("Field Of View")]
-	[SerializeField] float minFOV = 20;
-	[SerializeField] float maxFOV = 70;
-	[SerializeField] float fovDistanceMuliplier = 5;
-	[SerializeField] float fovLerpSpeed = 3;
+    [Header("   Field Of View")]
+    [SerializeField] float minFOV = 20;
+    [SerializeField] float maxFOV = 70;
+    [SerializeField] float fovDistanceMuliplier = 5;
+    [SerializeField] float fovLerpSpeed = 3;
+    [Header("At Transform")]
+    [SerializeField] Transform pos;
+    [SerializeField] float toPosSpeed = 2;
+    [SerializeField] float toPosRotSpeed = 2;
     void Start()
     {
         cam = GetComponent<Camera>();
@@ -22,9 +34,43 @@ public class Cam : MonoBehaviour
 
     void Update()
     {
-        GetPlayers();
-        transform.position = Vector3.Lerp(transform.position, GetCenterOfObjects(players.ToArray()) + offset, Time.deltaTime * speed);
-        SetFOV();
+        switch (curState)
+        {
+            case State.Normal:
+                GetPlayers();
+                transform.position = Vector3.Lerp(transform.position, GetCenterOfObjects(players.ToArray()) + offset, Time.deltaTime * speed);
+                transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.Euler(25.347f, 0, 0), Time.deltaTime * toPosRotSpeed);
+                SetFOV();
+                break;
+            case State.AtTrans:
+                MoveTowardsTrans();
+                break;
+        }
+    }
+
+    void MoveTowardsTrans()
+    {
+        transform.position = Vector3.Lerp(transform.position, pos.position, Time.deltaTime * toPosSpeed);
+        transform.rotation = Quaternion.Lerp(transform.rotation, pos.rotation, Time.deltaTime * toPosRotSpeed);
+        cam.fieldOfView = Mathf.Lerp(cam.fieldOfView, 60, Time.deltaTime * 10);
+    }
+
+    public void ChangeState(int newState)
+    {
+        switch (newState)
+        {
+            case 0:
+                curState = State.Normal;
+                break;
+            case 1:
+                curState = State.AtTrans;
+                break;
+        }
+    }
+
+    public void SetLookTransform(Transform newTrans)
+    {
+        pos = newTrans;
     }
 
     void GetPlayers()
