@@ -55,6 +55,16 @@ public class Cam : MonoBehaviour
         cam.fieldOfView = Mathf.Lerp(cam.fieldOfView, 60, Time.deltaTime * 10);
     }
 
+    public void SetTransMoveSpeed(float newSpeed)
+    {
+        toPosSpeed = newSpeed;
+    }
+
+    public void SetTransRotSpeed(float newSpeed)
+    {
+        toPosRotSpeed = newSpeed;
+    }
+
     public void ChangeState(int newState)
     {
         switch (newState)
