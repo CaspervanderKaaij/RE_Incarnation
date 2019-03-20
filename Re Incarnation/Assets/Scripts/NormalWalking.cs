@@ -22,11 +22,14 @@ public class NormalWalking : BaseMove
     [SerializeField] float gravityPullSpeed = 10;
     bool rotateHelp = false;
     Transform lastParent;
+    AudioSource footStepSFX;
+    [SerializeField] float footStepRepeatRate = 0.25f;
 
     void Start()
     {
         anim = cc.GetComponentInChildren<Animator>();
         InvokeRepeating("FallAnimChecker", 0, 0.1f);
+        footStepSFX = GetComponent<AudioSource>();
     }
     void Update()
     {
@@ -38,6 +41,7 @@ public class NormalWalking : BaseMove
         SetAnimWalkIdle(anim, Vector2.Distance(lastXZPos, new Vector2(transform.position.x, transform.position.z)));
         Gravity();
         SetInputs();
+
     }
 
     public void ResetAcceleration()
@@ -46,6 +50,14 @@ public class NormalWalking : BaseMove
         moveV3 = Vector3.zero;
         currentAngleAcceleration = 0;
         anim.SetInteger("NextMove", 0);
+    }
+
+    void PlayStepSound()
+    {
+        if (footStepSFX != null)
+        {
+            footStepSFX.Play();
+        }
     }
 
     void SetRotation()
@@ -161,7 +173,7 @@ public class NormalWalking : BaseMove
 
     void SetAnimWalkIdle(Animator anim, float walkSpeed)
     {
-        //function primaily used for walk, idle and fall animation
+        //function primaily used for walk, idle and fall animation, also sound is added here
         if (Physics.Raycast(transform.position, Vector3.down, 0.5f, LayerMask.GetMask("Default")) == true || cc.isGrounded == true)
         {
             anim.SetInteger("NextMove", 0);
@@ -174,9 +186,18 @@ public class NormalWalking : BaseMove
             }
             else if (anim.GetCurrentAnimatorStateInfo(0).IsTag("Walk") == true)
             {
+
+                if (IsInvoking("PlayStepSound") == false)
+                {
+                    CancelInvoke("PlayStepSound");
+                    InvokeRepeating("PlayStepSound", 0, footStepRepeatRate);
+                }
+
                 if (walkSpeed < 0.05f)
                 {
                     anim.SetInteger("NextMove", 1);
+
+                    CancelInvoke("PlayStepSound");
                 }
             }
         }

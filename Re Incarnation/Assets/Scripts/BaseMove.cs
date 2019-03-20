@@ -30,8 +30,8 @@ public class BaseMove : MonoBehaviour
         moveV3.x = transform.TransformDirection(0, 0, 1).x * speed;
         moveV3.z = transform.TransformDirection(0, 0, 1).z * speed;
 
-         Vector2 inputV2 = new Vector2(Input.GetAxis(normalWalking.vertInputName), Input.GetAxis(normalWalking.horInputName));
-         Vector3 rotGoal = cc.transform.localRotation.eulerAngles;
+        Vector2 inputV2 = new Vector2(Input.GetAxis(normalWalking.vertInputName), Input.GetAxis(normalWalking.horInputName));
+        Vector3 rotGoal = cc.transform.localRotation.eulerAngles;
         // print(cc.transform.parent.localEulerAngles.y);
         if (Vector2.SqrMagnitude(inputV2) != 0)
         {
@@ -49,11 +49,13 @@ public class BaseMove : MonoBehaviour
         cc.transform.localRotation = Quaternion.Lerp(cc.transform.localRotation, Quaternion.Euler(rotGoal), Time.deltaTime * rotateSpeed);
     }
 
-    public void SetRotSpeed(float newSpeed){
+    public void SetRotSpeed(float newSpeed)
+    {
         rotateSpeed = newSpeed;
     }
 
-      public void SetSpeed(float newSpeed){
+    public void SetSpeed(float newSpeed)
+    {
         speed = newSpeed;
     }
 
@@ -124,6 +126,10 @@ public class BaseMove : MonoBehaviour
             {
                 if (moves[i] != this)
                 {
+                    if (moves[i].enabled == true)
+                    {
+                        moves[i].endEvent.Invoke();
+                    }
                     moves[i].enabled = false;
                 }
                 else
